@@ -1,4 +1,4 @@
-group 'ca.llamabagel'
+group 'ca.llamabagel.transpo.server'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'kotlin'
@@ -8,11 +8,15 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url "https://dl.bintray.com/kotlin/ktor" }
+    google()
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile "io.ktor:ktor-server-netty:0.9.5"
+    compile "io.ktor:ktor-gson:0.9.5"
+
+    implementation project(':shared')
 }
 
 compileKotlin {
@@ -23,3 +27,5 @@ compileTestKotlin {
 }
 
 kotlin { experimental { coroutines "enable" } }
+
+mainClassName = 'io.ktor.server.netty.DevelopmentEngine'

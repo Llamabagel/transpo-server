@@ -1,2 +1,2 @@
 rootProject.name = 'transpo-server'
-include 'server'
+include 'server', 'shared'
