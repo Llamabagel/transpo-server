@@ -13,11 +13,18 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile "io.ktor:ktor-server-netty:0.9.5"
-    compile "io.ktor:ktor-gson:0.9.5"
+    compile "io.ktor:ktor-server-netty:1.0.0-beta-3"
+    compile "io.ktor:ktor-client-core:1.0.0-beta-3"
+    compile "io.ktor:ktor-client-apache:1.0.0-beta-3"
+    compile "io.ktor:ktor-gson:1.0.0-beta-3"
+
+    compile "ch.qos.logback:logback-classic:1.2.3"
 
     implementation project(':shared')
 }
+
+def keys = new Properties()
+file("keys.properties").withInputStream { stream -> keys.load(stream) }
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
