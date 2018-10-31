@@ -8,3 +8,6 @@ an API key. These keys can be configured in the `keys.properties` file located i
 configuration is provided in the `example.keys.properties` file. Because these keys are unique to each user, the 
 `keys.properties` file should _never_ be included in the repository and git commits. As such, a local copy of the 
 `keys.properties` file must be manually created each time this project is set up.
+
+Once configured, the application keys can be accessed in code through the 
+[`Keys`](server/src/main/kotlin/ca/llamabagel/transpo/server/Keys.kt) object.
