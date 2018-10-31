@@ -21,6 +21,8 @@ dependencies {
     compile "ch.qos.logback:logback-classic:1.2.3"
 
     implementation project(':shared')
+    
+    testCompile "io.ktor:ktor-server-test-host:1.0.0-beta-3"
 }
 
 compileKotlin {
