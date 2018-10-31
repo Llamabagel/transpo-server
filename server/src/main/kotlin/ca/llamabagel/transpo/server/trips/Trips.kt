@@ -15,18 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ca.llamabagel.transpo.server
+package ca.llamabagel.transpo.server.trips
 
-import io.ktor.application.Application
-import io.ktor.application.install
-import io.ktor.features.DefaultHeaders
 import io.ktor.routing.Routing
-import io.ktor.routing.routing
+import io.ktor.routing.get
 
-fun Application.main() {
-    install(DefaultHeaders)
-
-    install(Routing) {
-        index()
+fun Routing.trips() {
+    get("trips") {
+        
     }
 }

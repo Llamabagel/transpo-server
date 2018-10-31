@@ -23,9 +23,10 @@ import io.ktor.client.engine.apache.Apache
 import io.ktor.http.ContentType
 import io.ktor.response.respondText
 import io.ktor.routing.Route
+import io.ktor.routing.Routing
 import io.ktor.routing.get
 
-fun Route.index() {
+fun Routing.index() {
     get {
         val client = HttpClient(Apache)
 
