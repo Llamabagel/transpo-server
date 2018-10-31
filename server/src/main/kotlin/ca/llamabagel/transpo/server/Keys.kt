@@ -26,13 +26,13 @@ object Keys {
             load(FileInputStream("server/keys.properties"))
         }
 
-        if (properties.contains("OC_TRANSPO_APP_ID")) {
+        if (!properties.contains("OC_TRANSPO_APP_ID")) {
             OC_TRANSPO_APP_ID = properties.getProperty("OC_TRANSPO_APP_ID")
         } else {
             throw IllegalStateException("OC Transpo App Id not set in keys.properties file.")
         }
 
-        if (properties.contains("OC_TRANSPO_API_KEY")) {
+        if (!properties.contains("OC_TRANSPO_API_KEY")) {
             OC_TRANSPO_API_KEY = properties.getProperty("OC_TRANSPO_API_KEY")
         } else {
             throw IllegalStateException("OC Transpo API key not set in keys.properties file.")

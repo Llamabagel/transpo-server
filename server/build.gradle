@@ -23,9 +23,6 @@ dependencies {
     implementation project(':shared')
 }
 
-def keys = new Properties()
-file("keys.properties").withInputStream { stream -> keys.load(stream) }
-
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
