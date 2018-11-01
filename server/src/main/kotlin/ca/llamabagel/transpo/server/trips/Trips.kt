@@ -17,11 +17,34 @@
 
 package ca.llamabagel.transpo.server.trips
 
+import ca.llamabagel.transpo.models.trips.ApiResponse
+import ca.llamabagel.transpo.server.Keys
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.apache.Apache
+import io.ktor.client.request.get
 import io.ktor.routing.Routing
 import io.ktor.routing.get
+import javax.xml.parsers.DocumentBuilderFactory
 
 fun Routing.trips() {
     get("trips") {
-        
+        val code = context.parameters["stop"]
+        val client = HttpClient(Apache)
+        val apiResponse = client.get<String>("http://api.octranspo1.com/v1.2/GetNextTripsForStopAllRoutes?appId=${Keys.OC_TRANSPO_APP_ID}&apiKey=${Keys.OC_TRANSPO_API_KEY}&stopNo=$code")
+
+        buildResultFromResponse(apiResponse)
     }
+}
+
+/**
+ * Builds an [ApiResponse] object based on the (xml) response from a request to the OC Transpo API.
+ *
+ * @param response The string of the response from the OC Transpo API.
+ */
+private fun buildResultFromResponse(response: String): ApiResponse {
+
+    val documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+    val document = documentBuilder.parse(response)
+
+    TODO()
 }
