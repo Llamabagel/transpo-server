@@ -165,7 +165,7 @@ private fun buildTripFromElement(element: Element, xPath: XPath): Trip {
  * * ON = Orion Bus (usually a hybrid)
  *
  * Note that in the case of DD-DEH, this tends to signify an "extra". And extra is just an extra bus that is
- * assigned by OC Tranpo during rush hours to handle extra trips. More often than not, it is not a Double Decker.
+ * assigned by OC Transpo during rush hours to handle extra trips. More often than not, it is not a Double Decker.
  *
  * @param typeString The "BusType" string from the OC Transpo API.
  * @return The readable letter code for that bus type. Either "S", "L", "H", or "DD".

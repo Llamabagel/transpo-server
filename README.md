@@ -1,7 +1,13 @@
 # Transpo-Server
-This is the backend server component of Route 613 written in Kotlin using [Ktor](http://ktor.io/).
+This is the backend server component of Route 613 written in Kotlin using [Ktor](https://ktor.io/). More accurately, 
+this is a rewrite of the existing C# API but in Kotlin.
 
-## Development Setup
+## Development setup
+### Submodules
+Since this project relies on a submodule ([transpo-shared](https://github.com/dellisd/transpo-shared)) you must ensure 
+that the submodules are also cloned when cloning this repository. The easiest way is to simply clone this repository 
+by using the `--recursive` flag. e.g.`git clone --recursive https://github.com/dellisd/transpo-server.git`
+
 ### Application Keys
 In order for the backend server to communicate with OC Transpo's realtime API service the server requires an App ID and 
 an API key. These keys can be configured in the `keys.properties` file located in the server module. An example 
