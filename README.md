@@ -1,4 +1,6 @@
 # Transpo-Server
+[![Build Status](https://travis-ci.com/dellisd/transpo-server.svg?token=MVYEeLdes785X4q9tDBW&branch=master)](https://travis-ci.com/dellisd/transpo-server)
+
 This is the backend server component of Route 613 written in Kotlin using [Ktor](https://ktor.io/). More accurately, 
 this is a rewrite of the existing C# API but in Kotlin.
 
