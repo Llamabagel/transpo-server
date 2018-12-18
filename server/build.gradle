@@ -1,8 +1,9 @@
 group 'ca.llamabagel.transpo.server'
-version '1.0-SNAPSHOT'
+version 'git describe --tag --dirty'.execute().text.trim()
 
 apply plugin: 'kotlin'
 apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 repositories {
     mavenCentral()
@@ -34,4 +35,10 @@ compileTestKotlin {
 
 kotlin { experimental { coroutines "enable" } }
 
-mainClassName = 'io.ktor.server.netty.DevelopmentEngine'
+mainClassName = 'io.ktor.server.netty.EngineMain'
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
