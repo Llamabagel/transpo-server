@@ -15,28 +15,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ca.llamabagel.transpo.server
+package ca.llamabagel.transpo.server.plans
 
-import ca.llamabagel.transpo.server.trips.trips
-import io.ktor.application.Application
-import io.ktor.application.install
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.DefaultHeaders
-import io.ktor.gson.gson
+import ca.llamabagel.transpo.models.plans.request.PlansRequest
+import io.ktor.application.call
+import io.ktor.request.receive
 import io.ktor.routing.Routing
-import java.text.DateFormat
+import io.ktor.routing.post
 
-fun Application.main() {
-    install(DefaultHeaders)
-    install(ContentNegotiation) {
-        gson {
-            setDateFormat(DateFormat.LONG)
-            setPrettyPrinting()
-        }
-    }
+fun Routing.plans() {
+    post("/plans") {
+        val obj = call.receive<PlansRequest>()
 
-    install(Routing) {
-        index()
-        trips()
+        println(obj)
     }
 }
