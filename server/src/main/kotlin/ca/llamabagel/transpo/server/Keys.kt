@@ -33,6 +33,7 @@ import java.util.*
 object Keys {
     val OC_TRANSPO_APP_ID: String
     var OC_TRANSPO_API_KEY: String
+    var GOOGLE_API_KEY: String
 
     init {
         if (!Files.exists(Paths.get("server/keys.properties"))) {
@@ -53,6 +54,12 @@ object Keys {
             OC_TRANSPO_API_KEY = properties.getProperty("OC_TRANSPO_API_KEY")
         } else {
             throw IllegalStateException("OC Transpo API key not set in keys.properties file.")
+        }
+
+        if (!properties.contains("GOOGLE_API_KEY")) {
+            GOOGLE_API_KEY = properties.getProperty("GOOGLE_API_KEY")
+        } else {
+            throw IllegalStateException("Google API key not set in keys.properties")
         }
     }
 }
