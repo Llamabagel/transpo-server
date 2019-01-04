@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Llamabagel.
+ * Copyright (c) 2019 Llamabagel.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,20 +15,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ca.llamabagel.transpo.server
+package ca.llamabagel.transpo.server.plans
 
-import io.ktor.application.call
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.apache.Apache
-import io.ktor.http.ContentType
-import io.ktor.response.respondText
-import io.ktor.routing.Routing
-import io.ktor.routing.get
+import ca.llamabagel.transpo.server.Keys
+import com.google.maps.GeoApiContext
 
-fun Routing.index() {
-    get {
-        val client = HttpClient(Apache)
-
-        call.respondText("Hello World! ${Keys.OC_TRANSPO_APP_ID}", ContentType.Text.Plain)
+object ApiContextProvider {
+    val apiContext: GeoApiContext by lazy {
+        GeoApiContext.Builder()
+                .apiKey(Keys.GOOGLE_API_KEY)
+                .build()
     }
 }

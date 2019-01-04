@@ -19,6 +19,9 @@ dependencies {
     implementation "io.ktor:ktor-client-apache:1.0.0"
     implementation "io.ktor:ktor-gson:1.0.0"
 
+    implementation 'com.google.maps:google-maps-services:0.9.1'
+    implementation 'org.slf4j:slf4j-simple:1.7.25'
+
     implementation "ch.qos.logback:logback-classic:1.2.3"
 
     implementation project(':shared')

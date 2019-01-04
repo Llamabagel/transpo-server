@@ -17,6 +17,9 @@
 
 package ca.llamabagel.transpo.server
 
+import ca.llamabagel.transpo.models.plans.response.StepDetails
+import ca.llamabagel.transpo.models.plans.response.stepDetailsTypeFactory
+import ca.llamabagel.transpo.server.plans.plans
 import ca.llamabagel.transpo.server.trips.trips
 import io.ktor.application.Application
 import io.ktor.application.install
@@ -24,19 +27,20 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
 import io.ktor.routing.Routing
-import java.text.DateFormat
 
 fun Application.main() {
     install(DefaultHeaders)
     install(ContentNegotiation) {
         gson {
-            setDateFormat(DateFormat.LONG)
+            setDateFormat("MMM d, yyyy HH:mm:ss zzz")
             setPrettyPrinting()
+            registerTypeAdapter(StepDetails::class.java, stepDetailsTypeFactory)
         }
     }
 
     install(Routing) {
         index()
         trips()
+        plans()
     }
 }
