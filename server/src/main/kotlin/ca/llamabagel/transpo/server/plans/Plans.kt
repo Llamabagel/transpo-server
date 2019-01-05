@@ -28,7 +28,7 @@ fun Routing.plans() {
         val obj = call.receive<PlansRequest>()
 
         val placesData = ArrayList<PlaceData?>()
-        obj.locations.forEach { location ->
+        /*obj.locations.forEach { location ->
             when {
                 location.placeId == null -> {
                     placesData.add(if (location.latLng == null) null else getPlaceDataFromLatLng(location.latLng!!,
@@ -39,7 +39,7 @@ fun Routing.plans() {
                             location.description == null, location.description ?: ""))
                 }
             }
-        }
+        }*/
 
 
 

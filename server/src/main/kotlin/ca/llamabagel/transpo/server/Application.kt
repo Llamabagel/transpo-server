@@ -17,6 +17,8 @@
 
 package ca.llamabagel.transpo.server
 
+import ca.llamabagel.transpo.models.plans.request.Location
+import ca.llamabagel.transpo.models.plans.request.locationTypeFactory
 import ca.llamabagel.transpo.models.plans.response.StepDetails
 import ca.llamabagel.transpo.models.plans.response.stepDetailsTypeFactory
 import ca.llamabagel.transpo.server.plans.plans
@@ -34,7 +36,8 @@ fun Application.main() {
         gson {
             setDateFormat("MMM d, yyyy HH:mm:ss zzz")
             setPrettyPrinting()
-            registerTypeAdapter(StepDetails::class.java, stepDetailsTypeFactory)
+            registerTypeAdapterFactory(stepDetailsTypeFactory)
+            registerTypeAdapterFactory(locationTypeFactory)
         }
     }
 
