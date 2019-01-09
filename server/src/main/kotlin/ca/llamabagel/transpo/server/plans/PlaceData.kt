@@ -57,7 +57,7 @@ data class PlaceData(val identifier: String,
  * @param description The description of the place to use if not overwriting it with the result from the API.
  * @return A complete [PlaceData] object, or null if an error occurred.
  */
-suspend fun getPlaceDataFromLatLng(latLng: LatLng, overwriteDescription: Boolean = true, description: String = ""): PlaceData? {
+suspend fun getPlaceDataFromLatLng(latLng: LatLng, overwriteDescription: Boolean = true, description: String? = null): PlaceData? {
     val geocodeResult = try {
         GeocodingApi
                 .reverseGeocode(ApiContextProvider.apiContext, com.google.maps.model.LatLng(latLng.latitude, latLng.longitude))
@@ -67,7 +67,7 @@ suspend fun getPlaceDataFromLatLng(latLng: LatLng, overwriteDescription: Boolean
     }
 
     val result = geocodeResult[0]
-    return PlaceData(result.placeId, if (overwriteDescription) result.addressComponents[0].longName else description, latLng)
+    return PlaceData(result.placeId, if (overwriteDescription) result.addressComponents[0].longName else description ?: "", latLng)
 }
 
 /**
@@ -79,7 +79,7 @@ suspend fun getPlaceDataFromLatLng(latLng: LatLng, overwriteDescription: Boolean
  * @param description The description of the place to use if not overwriting it with the result from the API.
  * @return A complete [PlaceData] object, or null if an error occurred.
  */
-suspend fun getPlaceDataFromId(placeId: String, overwriteDescription: Boolean = true, description: String = ""): PlaceData? {
+suspend fun getPlaceDataFromId(placeId: String, overwriteDescription: Boolean = true, description: String? = null): PlaceData? {
     val detailsResult = try {
         PlacesApi.placeDetails(ApiContextProvider.apiContext, placeId).await()
     } catch (e: Exception) {
@@ -87,5 +87,5 @@ suspend fun getPlaceDataFromId(placeId: String, overwriteDescription: Boolean = 
     }
 
     val latLng = LatLng(detailsResult.geometry.location.lat, detailsResult.geometry.location.lng)
-    return PlaceData(placeId, if (overwriteDescription) detailsResult.name else description, latLng)
+    return PlaceData(placeId, if (overwriteDescription) detailsResult.name else description ?: "", latLng)
 }
