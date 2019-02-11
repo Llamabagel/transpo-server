@@ -1,7 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="GPLv3">
+  <settings>
     <module2copyright>
-      <element module="Project Files" copyright="GPLv3" />
+      <element module="Project Files" copyright="MIT Notice" />
     </module2copyright>
   </settings>
 </component>
