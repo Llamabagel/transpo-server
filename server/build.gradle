@@ -9,6 +9,7 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url "https://dl.bintray.com/kotlin/ktor" }
+    maven { url  "https://dl.bintray.com/dellisd/transpo" }
     google()
 }
 
@@ -23,9 +24,9 @@ dependencies {
     implementation 'org.slf4j:slf4j-simple:1.7.25'
 
     implementation "ch.qos.logback:logback-classic:1.2.3"
-
-    implementation project(':shared')
     
+    implementation 'ca.llamabagel.transpo:shared:1.0.0-alpha01'
+
     testImplementation "io.ktor:ktor-server-test-host:1.0.0"
 }
 
