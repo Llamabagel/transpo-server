@@ -15,10 +15,10 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "io.ktor:ktor-server-netty:1.0.0"
-    implementation "io.ktor:ktor-client-core:1.0.0"
-    implementation "io.ktor:ktor-client-apache:1.0.0"
-    implementation "io.ktor:ktor-gson:1.0.0"
+    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation "io.ktor:ktor-client-core:$ktor_version"
+    implementation "io.ktor:ktor-client-apache:$ktor_version"
+    implementation "io.ktor:ktor-gson:$ktor_version"
 
     implementation 'com.google.maps:google-maps-services:0.9.1'
     implementation 'org.slf4j:slf4j-simple:1.7.25'
@@ -27,7 +27,7 @@ dependencies {
     
     implementation 'ca.llamabagel.transpo:shared:1.0.0-alpha01'
 
-    testImplementation "io.ktor:ktor-server-test-host:1.0.0"
+    testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
 }
 
 compileKotlin {

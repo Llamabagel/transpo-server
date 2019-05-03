@@ -27,7 +27,7 @@ fun Routing.trips() {
     get("trips") {
         val stopCode = context.parameters["stop"]
         val client = HttpClient(Apache)
-        val apiResponse = client.call("http://api.octranspo1.com/v1.2/GetNextTripsForStopAllRoutes?appID=" +
+        val apiResponse = client.call("http://api.octranspo1.com/v1.3/GetNextTripsForStopAllRoutes?appID=" +
                 "${Keys.OC_TRANSPO_APP_ID}&apiKey=${Keys.OC_TRANSPO_API_KEY}&stopNo=$stopCode")
                 .response
                 .readBytes()
@@ -159,7 +159,8 @@ private fun buildTripFromElement(element: Element, xPath: XPath): Trip {
  */
 private fun getBusTypeFromString(typeString: String): String {
     return when {
-        typeString.contains("ON") || typeString.contains("H") && !typeString.contains("DD") -> "H"
+        typeString.contains("ON") -> "N"
+        typeString.contains("H") && !typeString.contains("DD") -> "H"
         typeString.contains("6") -> "L"
         typeString.contains("4") -> "S"
         typeString.contains("DD") && !typeString.contains("DEH") -> "DD"
