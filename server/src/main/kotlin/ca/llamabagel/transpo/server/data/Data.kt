@@ -10,6 +10,7 @@ import ca.llamabagel.transpo.models.app.DataPackage
 import ca.llamabagel.transpo.models.app.MetadataRequest
 import ca.llamabagel.transpo.models.app.Version
 import ca.llamabagel.transpo.server.DataSource
+import ca.llamabagel.transpo.server.GenericError
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
@@ -21,8 +22,6 @@ import io.ktor.routing.post
 import java.io.File
 
 fun Routing.data() {
-
-
     post("data/metadata") {
         val requestData = call.receive<MetadataRequest>()
 
@@ -30,7 +29,7 @@ fun Routing.data() {
         if (metaData != null) {
             call.respond(metaData)
         } else {
-            call.respond(HttpStatusCode.InternalServerError, Any())
+            call.respond(HttpStatusCode.InternalServerError, GenericError(404, "Could not load metadata"))
         }
     }
 
@@ -53,7 +52,7 @@ fun Routing.data() {
         if (file.exists()) {
             call.respondFile(file)
         } else {
-            call.respond(HttpStatusCode.NotFound, Any())
+            call.respond(HttpStatusCode.NotFound, GenericError(404, "Data file not found"))
         }
     }
 }

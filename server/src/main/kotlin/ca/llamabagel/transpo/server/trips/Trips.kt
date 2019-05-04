@@ -24,7 +24,7 @@ import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
 fun Routing.trips() {
-    get("trips") {
+    get("trips/{stop}") {
         val stopCode = context.parameters["stop"]
         val client = HttpClient(Apache)
         val apiResponse = client.call("http://api.octranspo1.com/v1.3/GetNextTripsForStopAllRoutes?appID=" +
