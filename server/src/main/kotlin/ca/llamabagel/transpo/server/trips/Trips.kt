@@ -44,7 +44,7 @@ fun Routing.trips() {
  */
 private fun buildResultFromResponse(stopCode: String?, response: ByteArray): ApiResponse {
     // Check and enforce a valid non-null stop code (rest of API response would be an error anyway).
-    stopCode ?: return ApiResponse("", 10, emptyList())
+    stopCode ?: return ApiResponse("", emptyList())
 
     val xPath = XPathFactory.newInstance().newXPath()
     val documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
@@ -53,12 +53,12 @@ private fun buildResultFromResponse(stopCode: String?, response: ByteArray): Api
     val responseRoot = xPath.evaluate("/Envelope/Body/GetRouteSummaryForStopResponse/GetRouteSummaryForStopResult",
             document,
             XPathConstants.NODE) as? Element
-            ?: return ApiResponse(stopCode, -1, emptyList()) // Return error if node ended up not existing
+            ?: return ApiResponse(stopCode, emptyList()) // Return error if node ended up not existing
 
     // Check for any errors returned from the API. TODO : Check error conditions
     val errorCode = (xPath.evaluate("./Error", responseRoot, XPathConstants.STRING) as? String)?.toIntOrNull()
     if (errorCode != null && errorCode != 0) {
-        return ApiResponse(stopCode, errorCode, emptyList())
+        return ApiResponse(stopCode, emptyList())
     }
 
     val routes = ArrayList<Route>()
@@ -76,7 +76,7 @@ private fun buildResultFromResponse(stopCode: String?, response: ByteArray): Api
         }
     }
 
-    return ApiResponse(stopCode, 0, routes)
+    return ApiResponse(stopCode, routes)
 }
 
 /**
@@ -149,7 +149,7 @@ private fun buildTripFromElement(element: Element, xPath: XPath): Trip {
  * * B = Bike Rack
  * * DEH = Diesel Electric Hybrid
  * * IN = New Flyer Inviro (40-foot bus)
- * * ON = Orion Bus (usually a hybrid)
+ * * ON = Supposed to indicate an Orion Bus but apparently indicates a Nova Bus currently.
  *
  * Note that in the case of DD-DEH, this tends to signify an "extra". And extra is just an extra bus that is
  * assigned by OC Transpo during rush hours to handle extra trips. More often than not, it is not a Double Decker.

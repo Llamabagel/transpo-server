@@ -4,21 +4,16 @@
 
 package ca.llamabagel.transpo.server
 
-import ca.llamabagel.transpo.models.app.Stop
 import ca.llamabagel.transpo.models.plans.request.Location
 import ca.llamabagel.transpo.models.plans.request.PlansRequest
-import ca.llamabagel.transpo.models.plans.request.locationTypeFactory
-import ca.llamabagel.transpo.models.plans.response.StepDetails
-import ca.llamabagel.transpo.models.plans.response.stepDetailsTypeFactory
-import com.google.gson.GsonBuilder
-import io.ktor.application.call
+import ca.llamabagel.transpo.models.transit.Stop
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
-import io.ktor.http.ContentType
-import io.ktor.response.respondText
 import io.ktor.routing.Routing
 import io.ktor.routing.get
-import java.util.*
+import io.ktor.application.call
+import io.ktor.response.respond
+
 
 fun Routing.index() {
     get {
@@ -27,19 +22,12 @@ fun Routing.index() {
         //call.respondText("Hello World! ${Keys.OC_TRANSPO_APP_ID}", ContentType.Text.Plain)
 
         val obj = PlansRequest(
-                listOf(
-                        Location.StopLocation(Stop("AA100", "1000", "A Stop", -75.0, 45.0)),
-                        Location.PlaceLocation("abcdefg", "A Place")
-                )
+            listOf(
+                Location.StopLocation(Stop("AA100", "1000", "A Stop", -75.0, 45.0, 0, null)),
+                Location.PlaceLocation("abcdefg", "A Place")
+            )
         )
 
-        val json = GsonBuilder()
-                .setDateFormat("MMM d, yyyy HH:mm:ss zzz")
-                .registerTypeAdapterFactory(stepDetailsTypeFactory)
-                .registerTypeAdapterFactory(locationTypeFactory)
-                .create()
-                .toJson(obj)
-
-        call.respondText(json, ContentType.Text.Plain)
+        call.respond(obj)
     }
 }
