@@ -23,12 +23,12 @@ object Keys {
     var GOOGLE_API_KEY: String
 
     init {
-        if (!Files.exists(Paths.get("server/keys.properties"))) {
+        if (!Files.exists(Paths.get("keys.properties"))) {
             throw IOException("keys.properties file not found.")
         }
 
         val properties = Properties().apply {
-            load(FileInputStream("server/keys.properties"))
+            load(FileInputStream("keys.properties"))
         }
 
         if (!properties.contains("OC_TRANSPO_APP_ID")) {
