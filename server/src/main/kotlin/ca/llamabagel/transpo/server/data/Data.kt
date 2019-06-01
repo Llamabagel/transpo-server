@@ -6,6 +6,7 @@ package ca.llamabagel.transpo.server.data
 
 import ca.llamabagel.transpo.Configuration
 import ca.llamabagel.transpo.models.app.MetadataRequest
+import ca.llamabagel.transpo.server.Config
 import ca.llamabagel.transpo.server.GenericError
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
@@ -44,7 +45,7 @@ fun Routing.data() {
             version = metadata.dataVersion
         }
 
-        val file = File("${Configuration.DATA_PACKAGE_DIRECTORY}/$schema/$version/$version.json")
+        val file = File("${Config.DATA_PACKAGE_DIRECTORY}/$schema/$version/$version.json")
         if (file.exists()) {
             call.respondFile(file)
         } else {

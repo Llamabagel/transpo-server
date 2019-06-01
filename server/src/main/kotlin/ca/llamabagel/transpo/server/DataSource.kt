@@ -14,9 +14,10 @@ object DataSource {
     private val ds: HikariDataSource
 
     init {
-        config.jdbcUrl = "jdbc:postgresql://${Configuration.SQL_HOST}:${Configuration.SQL_PORT}/${Configuration.SQL_DATABASE}"
-        config.username = Configuration.SQL_USER
-        config.password = Configuration.SQL_PASSWORD
+        config.jdbcUrl = "jdbc:postgresql://${Config.SQL_HOST}:${Config.SQL_PORT}/${Config.SQL_DATABASE}"
+        config.username = Config.SQL_USER
+        config.password = Config.SQL_PASSWORD
+        config.leakDetectionThreshold = 2000
 
         ds = HikariDataSource(config)
     }

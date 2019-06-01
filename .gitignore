@@ -82,4 +82,12 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 # Api keys
-./keys.properties
+keys.properties
+config.properties
+
+# Any stray .zip files
+*.zip
+
+# Testing folders
+/packages
+/config
