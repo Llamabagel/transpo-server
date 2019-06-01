@@ -45,15 +45,15 @@ services:
           memory: 512M
       restart_policy:
         condition: on-failure
-    ports:
-      - "8080:8080"
     networks:
-      - webnet
+      hostnet: {}
     volumes:
       - <your-config-folder>:/app/config
       - <your-packages-folder>:/app/packages
 networks:
-  webnet:
+  hostnet:
+    external: true
+    name: host
 ```
 
 Replace `<your-config-folder>` with the path to the Configuration directory that you created before. Do the same for `<your-packages-folder>` but with the packages directory that you created.
