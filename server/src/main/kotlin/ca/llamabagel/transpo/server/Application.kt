@@ -8,6 +8,7 @@ import ca.llamabagel.transpo.Configuration
 import ca.llamabagel.transpo.server.data.data
 import ca.llamabagel.transpo.server.feed.Language
 import ca.llamabagel.transpo.server.feed.LiveUpdatesCacher
+import ca.llamabagel.transpo.server.feed.feed
 import ca.llamabagel.transpo.server.plans.plans
 import ca.llamabagel.transpo.server.trips.trips
 import ca.llamabagel.transpo.server.utils.CoroutinesDispatcherProvider
@@ -39,6 +40,7 @@ fun Application.main() {
         trips()
         plans()
         data()
+        feed()
     }
 
     launch {

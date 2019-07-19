@@ -58,11 +58,15 @@ class LiveUpdatesCacher(
     }
 
     private fun cacheResults() {
-        Language.values().forEach { language ->
-            GlobalScope.launch {
+        GlobalScope.launch {
+            val allItems = Language.values().flatMap { language ->
                 val feed = getFeed("http://www.octranspo.com/$language/feeds/updates-$language/")
                 insertItems(language, feed)
+
+                return@flatMap feed
             }
+
+            updateCancelledItems(allItems)
         }
     }
 
@@ -76,6 +80,7 @@ class LiveUpdatesCacher(
                         if (resultSet.next()) getLiveUpdateFromResultSet(resultSet) else null
                     }.toList()
                 }
+
             connection.prepareStatement("INSERT INTO live_updates VALUES(?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING")
                 .use { statement ->
                     // Only insert items that aren't already in the database
@@ -97,12 +102,13 @@ class LiveUpdatesCacher(
                             insertLiveUpdateAffected(connection, item)
                         }
                 }
+        }
+    }
 
-            val currentGuids = items.joinToString { it.guid }
-            connection.prepareStatement("UPDATE live_updates SET active = false, removal_date = current_timestamp WHERE active = true AND guid NOT IN (?)")
+    private fun updateCancelledItems(items: List<LiveUpdate>) {
+        DataSource.getConnection().use { connection ->
+            connection.prepareStatement("UPDATE live_updates SET active = false, removal_date = current_timestamp WHERE active = true AND guid NOT IN (${items.joinToString { "'${it.guid}'" }})")
                 .use { statement ->
-                    statement.setString(1, currentGuids)
-
                     statement.execute()
                 }
         }
