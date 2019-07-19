@@ -1,5 +1,5 @@
 group 'ca.llamabagel.transpo.server'
-version 'git describe --tag --dirty'.execute().text.trim()
+version 'git describe --tag'.execute().text.trim()
 
 apply plugin: 'kotlin'
 apply plugin: 'application'
@@ -48,4 +48,5 @@ shadowJar {
     manifest {
         attributes 'Main-Class': mainClassName
     }
+    version = null
 }
