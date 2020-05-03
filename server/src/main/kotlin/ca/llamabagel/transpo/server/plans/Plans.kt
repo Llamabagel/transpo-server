@@ -29,12 +29,6 @@ fun Routing.plans() {
             }
         }
 
-        val client = HttpClient(Apache)
-        client.call {
-            header("User-Agent", "Route 613")
-            method = HttpMethod.Post
-        }
-
         println(obj)
     }
 }

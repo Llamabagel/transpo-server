@@ -6,44 +6,40 @@ package ca.llamabagel.transpo.server
 
 import ca.llamabagel.transpo.Configuration
 import ca.llamabagel.transpo.server.data.data
-import ca.llamabagel.transpo.server.feed.Language
 import ca.llamabagel.transpo.server.feed.LiveUpdatesCacher
 import ca.llamabagel.transpo.server.feed.feed
 import ca.llamabagel.transpo.server.plans.plans
 import ca.llamabagel.transpo.server.trips.trips
-import ca.llamabagel.transpo.server.utils.CoroutinesDispatcherProvider
-import com.google.gson.FieldNamingPolicy
-import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
-import io.ktor.gson.gson
-import io.ktor.http.ContentType
 import io.ktor.routing.Routing
-import kotlinx.coroutines.async
+import io.ktor.serialization.json
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
 
-val Config = Configuration("config")
+val Config by lazy { Configuration("config") }
 
-fun Application.main() {
-    install(DefaultHeaders)
-    install(ContentNegotiation) {
-        //register(ContentType.Any, JsonSerializableConverter())
-        gson {
-            setFieldNamingStrategy(FieldNamingPolicy.IDENTITY)
+
+fun main() {
+    val server = embeddedServer(Netty) {
+        install(DefaultHeaders)
+        install(ContentNegotiation) {
+            json()
+        }
+
+        install(Routing) {
+            index()
+            trips()
+            plans()
+            data()
+            feed()
+        }
+
+        launch {
+            LiveUpdatesCacher().beginUpdates()
         }
     }
-
-    install(Routing) {
-        index()
-        trips()
-        plans()
-        data()
-        feed()
-    }
-
-    launch {
-        LiveUpdatesCacher().beginUpdates()
-    }
+    server.start(wait = true)
 }

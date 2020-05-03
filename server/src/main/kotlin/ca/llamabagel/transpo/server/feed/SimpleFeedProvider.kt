@@ -9,14 +9,13 @@ package ca.llamabagel.transpo.server.feed
 import ca.llamabagel.transpo.models.updates.LiveUpdate
 import ca.llamabagel.transpo.server.utils.CoroutinesDispatcherProvider
 import io.ktor.client.HttpClient
-import io.ktor.client.call.call
 import io.ktor.client.engine.apache.Apache
-import io.ktor.client.response.readBytes
+import io.ktor.client.request.get
 import kotlinx.coroutines.withContext
 import org.w3c.dom.Element
 import org.w3c.dom.NodeList
 import java.io.ByteArrayInputStream
-import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
@@ -28,9 +27,7 @@ class SimpleFeedProvider(
     private val xPath = XPathFactory.newInstance().newXPath()
 
     override suspend fun getFeed(feedUrl: String): List<LiveUpdate> = withContext(dispatchers.io) {
-        val response = client.call(feedUrl)
-            .response
-            .readBytes()
+        val response = client.get<ByteArray>(feedUrl)
 
         val documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         val document = documentBuilder.parse(ByteArrayInputStream(response))
@@ -57,7 +54,7 @@ class SimpleFeedProvider(
     private fun buildUpdateFromElement(element: Element): LiveUpdate {
         val title = xPath.evaluate("./title", element, XPathConstants.STRING) as String
         val dateString = xPath.evaluate("./pubDate", element, XPathConstants.STRING) as String
-        val date = SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss zzz").parse(dateString)
+        val date = OffsetDateTime.parse("EEE, dd MMM yyyy hh:mm:ss zzz")
 
         val category = xPath.evaluate("./category", element, XPathConstants.STRING) as String
         val guid = xPath.evaluate("./guid", element, XPathConstants.STRING) as String

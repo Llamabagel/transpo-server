@@ -12,7 +12,9 @@ import io.ktor.routing.Routing
 import io.ktor.routing.get
 import java.sql.Connection
 import java.sql.ResultSet
-import java.util.*
+import java.time.Instant
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 fun Routing.feed() {
     get("feed") {
@@ -40,7 +42,7 @@ fun Routing.feed() {
 private fun getLiveUpdateFromResultSet(connection: Connection, resultSet: ResultSet): LiveUpdate {
     val liveUpdate = LiveUpdate(
         title = resultSet.getString("title"),
-        date = Date(resultSet.getTimestamp("date").time),
+        date = OffsetDateTime.ofInstant(Instant.ofEpochMilli(resultSet.getTimestamp("date").time), ZoneOffset.UTC),
         category = resultSet.getString("category"),
         link = resultSet.getString("link"),
         description = resultSet.getString("description"),

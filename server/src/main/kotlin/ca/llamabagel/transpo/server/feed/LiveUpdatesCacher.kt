@@ -7,30 +7,18 @@ package ca.llamabagel.transpo.server.feed
 import ca.llamabagel.transpo.models.updates.LiveUpdate
 import ca.llamabagel.transpo.server.DataSource
 import ca.llamabagel.transpo.server.utils.CoroutinesDispatcherProvider
-import io.ktor.client.HttpClient
-import io.ktor.client.call.call
-import io.ktor.client.engine.apache.Apache
-import io.ktor.client.request.get
-import io.ktor.client.response.readBytes
-import io.ktor.client.response.readText
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.w3c.dom.Element
-import org.w3c.dom.NodeList
-import java.io.ByteArrayInputStream
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.Timestamp
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.Instant
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.xpath.XPathConstants
-import javax.xml.xpath.XPathFactory
 
 class LiveUpdatesCacher(
     private val periodMinutes: Long = 5,
@@ -92,7 +80,7 @@ class LiveUpdatesCacher(
                                 setString(1, guid)
                                 setString(2, language.string)
                                 setString(3, title)
-                                setTimestamp(4, Timestamp(date.time))
+                                setTimestamp(4, Timestamp(date.toInstant().toEpochMilli()))
                                 setString(5, category)
                                 setString(6, link)
                                 setString(7, description)
@@ -142,7 +130,7 @@ class LiveUpdatesCacher(
     private fun getLiveUpdateFromResultSet(resultSet: ResultSet): LiveUpdate {
         return LiveUpdate(
             title = resultSet.getString("title"),
-            date = Date(resultSet.getTimestamp("date").time),
+            date = OffsetDateTime.ofInstant(Instant.ofEpochMilli(resultSet.getTimestamp("date").time), ZoneOffset.UTC),
             category = resultSet.getString("category"),
             link = resultSet.getString("link"),
             description = resultSet.getString("description"),

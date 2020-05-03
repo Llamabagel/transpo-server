@@ -18,12 +18,15 @@ dependencies {
     implementation "io.ktor:ktor-server-netty:$ktor_version"
     implementation "io.ktor:ktor-client-core:$ktor_version"
     implementation "io.ktor:ktor-client-apache:$ktor_version"
+    implementation "io.ktor:ktor-serialization:$ktor_version"
     implementation "io.ktor:ktor-gson:$ktor_version"
 
     implementation 'com.google.maps:google-maps-services:0.9.1'
     implementation 'org.slf4j:slf4j-simple:1.7.25'
 
     implementation "ch.qos.logback:logback-classic:1.2.3"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
     
     implementation "ca.llamabagel.transpo:shared:$transpo_version"
     implementation "ca.llamabagel.transpo:gtfs:$transpo_version"

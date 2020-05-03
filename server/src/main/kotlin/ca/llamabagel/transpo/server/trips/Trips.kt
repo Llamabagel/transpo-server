@@ -11,6 +11,7 @@ import ca.llamabagel.transpo.server.Keys
 import io.ktor.client.HttpClient
 import io.ktor.client.call.call
 import io.ktor.client.engine.apache.Apache
+import io.ktor.client.request.get
 import io.ktor.client.response.readBytes
 import io.ktor.response.respond
 import io.ktor.routing.Routing
@@ -27,10 +28,10 @@ fun Routing.trips() {
     get("trips/{stop}") {
         val stopCode = context.parameters["stop"]
         val client = HttpClient(Apache)
-        val apiResponse = client.call("http://api.octranspo1.com/v1.3/GetNextTripsForStopAllRoutes?appID=" +
-                "${Keys.OC_TRANSPO_APP_ID}&apiKey=${Keys.OC_TRANSPO_API_KEY}&stopNo=$stopCode")
-                .response
-                .readBytes()
+        val apiResponse = client.get<ByteArray>(
+            "http://api.octranspo1.com/v1.3/GetNextTripsForStopAllRoutes?appID=" +
+                    "${Keys.OC_TRANSPO_APP_ID}&apiKey=${Keys.OC_TRANSPO_API_KEY}&stopNo=$stopCode"
+        )
 
         context.respond(buildResultFromResponse(stopCode, apiResponse))
     }
@@ -50,10 +51,12 @@ private fun buildResultFromResponse(stopCode: String?, response: ByteArray): Api
     val documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
     val document = documentBuilder.parse(ByteArrayInputStream(response))
 
-    val responseRoot = xPath.evaluate("/Envelope/Body/GetRouteSummaryForStopResponse/GetRouteSummaryForStopResult",
-            document,
-            XPathConstants.NODE) as? Element
-            ?: return ApiResponse(stopCode, emptyList()) // Return error if node ended up not existing
+    val responseRoot = xPath.evaluate(
+        "/Envelope/Body/GetRouteSummaryForStopResponse/GetRouteSummaryForStopResult",
+        document,
+        XPathConstants.NODE
+    ) as? Element
+        ?: return ApiResponse(stopCode, emptyList()) // Return error if node ended up not existing
 
     // Check for any errors returned from the API. TODO : Check error conditions
     val errorCode = (xPath.evaluate("./Error", responseRoot, XPathConstants.STRING) as? String)?.toIntOrNull()
@@ -113,25 +116,29 @@ private fun buildRouteFromElement(element: Element, xPath: XPath): Route {
 private fun buildTripFromElement(element: Element, xPath: XPath): Trip {
     val tripDestination = xPath.evaluate("./TripDestination", element, XPathConstants.STRING) as String
     val tripStartTime = xPath.evaluate("./TripStartTime", element, XPathConstants.STRING) as String
-    val adjustedScheduleTime = (xPath.evaluate("./AdjustedScheduleTime", element, XPathConstants.STRING) as String).toInt()
+    val adjustedScheduleTime =
+        (xPath.evaluate("./AdjustedScheduleTime", element, XPathConstants.STRING) as String).toInt()
     val adjustmentAge = (xPath.evaluate("./AdjustmentAge", element, XPathConstants.STRING) as String).toFloat()
-    val lastTripOfSchedule = (xPath.evaluate("./LastTripOfSchedule", element, XPathConstants.STRING) as String).toLowerCase() == "1"
+    val lastTripOfSchedule =
+        (xPath.evaluate("./LastTripOfSchedule", element, XPathConstants.STRING) as String).toLowerCase() == "1"
     val busTypeText = xPath.evaluate("./BusType", element, XPathConstants.STRING) as String
     val latitudeText = xPath.evaluate("./Latitude", element, XPathConstants.STRING) as String
     val longitudeText = xPath.evaluate("./Longitude", element, XPathConstants.STRING) as String
     val gpsText = xPath.evaluate("./GPSSpeed", element, XPathConstants.STRING) as String
 
-    return Trip(tripDestination,
-            tripStartTime,
-            adjustedScheduleTime,
-            adjustmentAge,
-            lastTripOfSchedule,
-            busType = getBusTypeFromString(busTypeText),
-            latitude = latitudeText.toDoubleOrNull(),
-            longitude = longitudeText.toDoubleOrNull(),
-            gpsSpeed = gpsText.toFloatOrNull(),
-            hasBikeRack = busTypeText.contains("B"),
-            punctuality = 0)
+    return Trip(
+        tripDestination,
+        tripStartTime,
+        adjustedScheduleTime,
+        adjustmentAge,
+        lastTripOfSchedule,
+        busType = getBusTypeFromString(busTypeText),
+        latitude = latitudeText.toDoubleOrNull(),
+        longitude = longitudeText.toDoubleOrNull(),
+        gpsSpeed = gpsText.toFloatOrNull(),
+        hasBikeRack = busTypeText.contains("B"),
+        punctuality = 0
+    )
 }
 
 /**
