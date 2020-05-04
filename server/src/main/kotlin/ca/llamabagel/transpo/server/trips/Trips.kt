@@ -4,15 +4,14 @@
 
 package ca.llamabagel.transpo.server.trips
 
+import ca.llamabagel.transpo.models.LatLng
 import ca.llamabagel.transpo.models.trips.ApiResponse
 import ca.llamabagel.transpo.models.trips.Route
 import ca.llamabagel.transpo.models.trips.Trip
 import ca.llamabagel.transpo.server.Keys
 import io.ktor.client.HttpClient
-import io.ktor.client.call.call
 import io.ktor.client.engine.apache.Apache
 import io.ktor.client.request.get
-import io.ktor.client.response.readBytes
 import io.ktor.response.respond
 import io.ktor.routing.Routing
 import io.ktor.routing.get
@@ -117,7 +116,7 @@ private fun buildTripFromElement(element: Element, xPath: XPath): Trip {
     val tripDestination = xPath.evaluate("./TripDestination", element, XPathConstants.STRING) as String
     val tripStartTime = xPath.evaluate("./TripStartTime", element, XPathConstants.STRING) as String
     val adjustedScheduleTime =
-        (xPath.evaluate("./AdjustedScheduleTime", element, XPathConstants.STRING) as String).toInt()
+        (xPath.evaluate("./AdjustedScheduleTime", element, XPathConstants.STRING) as String).toLong()
     val adjustmentAge = (xPath.evaluate("./AdjustmentAge", element, XPathConstants.STRING) as String).toFloat()
     val lastTripOfSchedule =
         (xPath.evaluate("./LastTripOfSchedule", element, XPathConstants.STRING) as String).toLowerCase() == "1"
@@ -126,6 +125,10 @@ private fun buildTripFromElement(element: Element, xPath: XPath): Trip {
     val longitudeText = xPath.evaluate("./Longitude", element, XPathConstants.STRING) as String
     val gpsText = xPath.evaluate("./GPSSpeed", element, XPathConstants.STRING) as String
 
+    val latitude = latitudeText.toDoubleOrNull()
+    val longitude = longitudeText.toDoubleOrNull()
+    val position = if (latitude != null && longitude != null) LatLng(latitude, longitude) else null
+
     return Trip(
         tripDestination,
         tripStartTime,
@@ -133,8 +136,7 @@ private fun buildTripFromElement(element: Element, xPath: XPath): Trip {
         adjustmentAge,
         lastTripOfSchedule,
         busType = getBusTypeFromString(busTypeText),
-        latitude = latitudeText.toDoubleOrNull(),
-        longitude = longitudeText.toDoubleOrNull(),
+        position = position,
         gpsSpeed = gpsText.toFloatOrNull(),
         hasBikeRack = busTypeText.contains("B"),
         punctuality = 0

@@ -16,6 +16,8 @@ import org.w3c.dom.Element
 import org.w3c.dom.NodeList
 import java.io.ByteArrayInputStream
 import java.time.OffsetDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
@@ -54,7 +56,8 @@ class SimpleFeedProvider(
     private fun buildUpdateFromElement(element: Element): LiveUpdate {
         val title = xPath.evaluate("./title", element, XPathConstants.STRING) as String
         val dateString = xPath.evaluate("./pubDate", element, XPathConstants.STRING) as String
-        val date = OffsetDateTime.parse("EEE, dd MMM yyyy hh:mm:ss zzz")
+        val date = ZonedDateTime.parse(dateString, DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss zzz"))
+            .toOffsetDateTime()
 
         val category = xPath.evaluate("./category", element, XPathConstants.STRING) as String
         val guid = xPath.evaluate("./guid", element, XPathConstants.STRING) as String

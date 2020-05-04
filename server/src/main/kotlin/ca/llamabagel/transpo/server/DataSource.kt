@@ -4,7 +4,6 @@
 
 package ca.llamabagel.transpo.server
 
-import ca.llamabagel.transpo.Configuration
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import java.sql.Connection

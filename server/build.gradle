@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation "io.ktor:ktor-server-cio:$ktor_version"
     implementation "io.ktor:ktor-client-core:$ktor_version"
     implementation "io.ktor:ktor-client-apache:$ktor_version"
     implementation "io.ktor:ktor-serialization:$ktor_version"
@@ -30,8 +30,7 @@ dependencies {
     
     implementation "ca.llamabagel.transpo:shared:$transpo_version"
     implementation "ca.llamabagel.transpo:gtfs:$transpo_version"
-    implementation "ca.llamabagel.transpo:config:$transpo_version"
-    
+
     implementation "com.zaxxer:HikariCP:3.3.1"
     
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
@@ -45,11 +44,10 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-mainClassName = 'io.ktor.server.netty.EngineMain'
+mainClassName = 'ca.llamabagel.transpo.server.ApplicationKt'
 
 shadowJar {
     manifest {
         attributes 'Main-Class': mainClassName
     }
-    version = null
 }

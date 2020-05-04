@@ -4,7 +4,6 @@
 
 package ca.llamabagel.transpo.server
 
-import ca.llamabagel.transpo.Configuration
 import ca.llamabagel.transpo.server.data.data
 import ca.llamabagel.transpo.server.feed.LiveUpdatesCacher
 import ca.llamabagel.transpo.server.feed.feed
@@ -15,15 +14,16 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.routing.Routing
 import io.ktor.serialization.json
+import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
 import kotlinx.coroutines.launch
 
 val Config by lazy { Configuration("config") }
 
 
+@ExperimentalStdlibApi
 fun main() {
-    val server = embeddedServer(Netty) {
+    val server = embeddedServer(CIO, port = 8080) {
         install(DefaultHeaders)
         install(ContentNegotiation) {
             json()

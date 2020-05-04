@@ -4,8 +4,6 @@
 
 package ca.llamabagel.transpo.server
 
-import ca.llamabagel.transpo.models.plans.request.Location
-import ca.llamabagel.transpo.models.plans.request.PlansRequest
 import ca.llamabagel.transpo.models.transit.Stop
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.apache.Apache
@@ -21,13 +19,13 @@ fun Routing.index() {
 
         //call.respondText("Hello World! ${Keys.OC_TRANSPO_APP_ID}", ContentType.Text.Plain)
 
-        val obj = PlansRequest(
-            listOf(
-                Location.StopLocation(Stop("AA100", "1000", "A Stop", -75.0, 45.0, 0, null)),
-                Location.PlaceLocation("abcdefg", "A Place")
-            )
-        )
+//        val obj = PlansRequest(
+//            listOf(
+//                Location.StopLocation(Stop("AA100", "1000", "A Stop", -75.0, 45.0, 0, null)),
+//                Location.PlaceLocation("abcdefg", "A Place")
+//            )
+//        )
 
-        call.respond(obj)
+//        call.respond(obj)
     }
 }

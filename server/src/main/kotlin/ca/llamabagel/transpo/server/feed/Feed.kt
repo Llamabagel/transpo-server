@@ -16,6 +16,7 @@ import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 
+@ExperimentalStdlibApi
 fun Routing.feed() {
     get("feed") {
         val language = context.parameters["lang"] ?: "en"
@@ -27,12 +28,11 @@ fun Routing.feed() {
                 }
 
             val resultSet = statement.executeQuery()
-            val results = generateSequence {
-                if (resultSet.next()) getLiveUpdateFromResultSet(
-                    connection,
-                    resultSet
-                ) else null
-            }.toList()
+            val results = buildList {
+                while (resultSet.next()) {
+                    add(getLiveUpdateFromResultSet(connection, resultSet))
+                }
+            }
 
             context.respond(results)
         }
